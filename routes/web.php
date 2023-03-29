@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\LessonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use Illuminate\Foundation\Application;
@@ -40,6 +42,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/program', [ProgramController::class, 'store'])->name('program.store');
 
     Route::get('/user', [RegisteredUserController::class, 'index'])->name('user.index');
+
+    Route::get('/course', [CourseController::class, 'index'])->name('course.index');
+    Route::post('/course', [CourseController::class, 'store'])->name('course.store');
+
+    Route::get('/lesson', [LessonController::class, 'index'])->name('lesson.index');
+    Route::post('/lesson', [LessonController::class, 'store'])->name('lesson.store');
 });
 
 require __DIR__.'/auth.php';

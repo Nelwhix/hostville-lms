@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Program::factory()->count(10)->create();
         $this->call([
             PermissionSeeder::class,
             AdminSeeder::class

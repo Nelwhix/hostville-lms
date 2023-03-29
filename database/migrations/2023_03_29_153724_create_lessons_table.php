@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('type');
             $table->string('short_description');
             $table->string('content');
-            $table->string('cover_image');
-            $table->string('video_url');
+            $table->string('cover_image')->nullable();
+            $table->string('video_url')->nullable();
             $table->timestamps();
         });
     }

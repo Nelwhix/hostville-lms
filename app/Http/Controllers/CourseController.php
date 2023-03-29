@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Program;
-use Carbon\CarbonImmutable;
+use App\Models\Course;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
-class ProgramController extends Controller
+class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): \Inertia\Response
+    public function index()
     {
-        $programs = Program::all();
+        $courses = Course::all();
 
-        return Inertia::render('Program', [
-            'programs' => $programs
+        return Inertia::render('Courses', [
+            'courses' => $courses
         ]);
     }
 
@@ -29,34 +27,31 @@ class ProgramController extends Controller
     public function store(Request $request)
     {
         if (!$request->user()->hasRole('admin')) {
-            return redirect(route('program.index'));
+            return redirect(route('course.index'));
         }
 
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'duration' => 'required'
+            'type' => 'required'
         ]);
 
-        $startDate = new CarbonImmutable($request->duration[0]);
-        $endDate = new CarbonImmutable($request->duration[1]);
-        $duration = $endDate->diffInDays($startDate);
 
         $fileName = null;
         if ($request->hasFile('cover_image')) {
             $file = $request->file('cover_image');
             $fileName = (string)Str::ulid() . "." . $file->extension();
-            $file->storeAs('programs/', $fileName, 'public');
+            $file->storeAs('courses/', $fileName, 'public');
         }
 
-        Program::create([
+        Course::create([
             'title' => $request->title,
             'description' => $request->description,
-            'duration' => $duration,
+            'type' => $request->type,
             'cover_image' => $fileName
         ]);
 
-        return redirect(route('program.index'));
+        return redirect(route('course.index'));
     }
 
     /**
