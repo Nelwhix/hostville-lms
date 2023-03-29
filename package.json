@@ -17,6 +17,7 @@
         "vue": "^3.2.41"
     },
     "dependencies": {
-        "daisyui": "^2.51.5"
+        "daisyui": "^2.51.5",
+        "vue-datepicker-next": "^1.0.3"
     }
 }

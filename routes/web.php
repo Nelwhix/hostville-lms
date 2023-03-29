@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProgramController;
 use Illuminate\Foundation\Application;
@@ -36,6 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/program', [ProgramController::class, 'index'])->name('program.index');
+    Route::post('/program', [ProgramController::class, 'store'])->name('program.store');
+
+    Route::get('/user', [RegisteredUserController::class, 'index'])->name('user.index');
 });
 
 require __DIR__.'/auth.php';
