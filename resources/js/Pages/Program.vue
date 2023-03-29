@@ -43,7 +43,7 @@ const submit = () => {
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg grid grid-cols-3">
-                    <div v-for="program in programs" class="card w-96 bg-base-100 shadow-xl">
+                    <div v-for="program in programs" :key="program.id" class="card w-96 bg-base-100 shadow-xl">
                         <figure><img :src="`/storage/programs/${program.cover_image}`" alt="program cover_image" /></figure>
                         <div class="card-body">
                             <h2 class="card-title">{{ program.title }}</h2>
