@@ -15,4 +15,8 @@ class Program extends Model
         'cover_image',
         'duration'
     ];
+
+    public function users() {
+        return $this->belongsToMany(User::class);
+    }
 }

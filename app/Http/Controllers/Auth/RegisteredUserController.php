@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Program;
+use App\Models\Program_User;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -46,6 +48,13 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ])->assignRole('student');
+
+        $randomProgram = Program::query()->inRandomOrder()->first();
+
+        Program_User::create([
+           'program_id' => $randomProgram->id,
+           'user_id' => $user->id
+        ]);
 
 
         Auth::login($user);
