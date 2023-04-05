@@ -1,34 +1,39 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {Head, useForm} from '@inertiajs/vue3';
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import DatePicker from 'vue-datepicker-next';
-import 'vue-datepicker-next/index.css';
-import TextInput from "@/Components/TextInput.vue";
+import {Head} from '@inertiajs/vue3';
+import AddProgram from "@/Components/programs/AddProgram.vue";
+import EditProgram from "@/Components/programs/EditProgram.vue";
+import { ref } from "vue";
 
-defineProps({ programs: Array })
-
-const form = useForm({
-    title: '',
-    description: '',
-    duration: null,
-    cover_image: null,
-    processing: false
+const props = defineProps({
+    programs: Array,
+    isAdmin: Boolean
 })
 
-const handleImage = (e) => {
-    form.cover_image = e.target.files[0]
+const singleProgram = ref({
+    id: 0,
+    title: "",
+    description: "",
+    duration: "",
+    cover_image: "",
+    created_at: null,
+    updated_at: null
+})
+
+const showEditModal = (id) => {
+   const result = props.programs.filter((item) => item.id === id)
+    singleProgram.value = result[0]
+
+    document.getElementById('edit-program').checked = true;
 }
 
-const submit = () => {
-    form.processing = true
-    form.post(route('program.store'));
-};
+const deleteProgram = () => {
+
+}
 </script>
 
 <template>
-    <Head title="Programs" />
+    <Head title="Programs" ></Head>
 
     <AuthenticatedLayout>
         <template #header>
@@ -42,79 +47,22 @@ const submit = () => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg grid grid-cols-3">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg grid grid-cols-2 lg:grid-cols-3 gap-y-5">
                     <div v-for="program in programs" :key="program.id" class="card w-96 bg-base-100 shadow-xl">
                         <figure><img :src="`/storage/programs/${program.cover_image}`" alt="program cover_image" /></figure>
                         <div class="card-body">
                             <h2 class="card-title">{{ program.title }}</h2>
                             <p>{{ program.description }}</p>
-
+                            <div v-if="isAdmin" class="card-actions justify-end">
+                                <button @click="showEditModal(program.id)" class="btn bg-gray-400 border-gray-400">Edit</button>
+                                <button @click="deleteProgram(program.id)" class="btn bg-gray-800 border-gray-800">Delete</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <input type="checkbox" id="add-program" class="modal-toggle" />
-        <div class="modal">
-            <div class="modal-box">
-                <h3>Add New Program</h3>
-
-                <form @submit.prevent="submit">
-                    <div>
-                        <InputLabel for="title" value="Title" />
-
-                        <TextInput
-                            id="title"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.title"
-                            required
-                            autofocus
-                            autocomplete="name"
-                        />
-
-                        <InputError class="mt-2" :message="form.errors.title" />
-                    </div>
-
-                    <div class="mt-4">
-                        <InputLabel for="desc" value="Description" />
-
-                        <TextInput
-                            id="desc"
-                            type="text"
-                            class="mt-1 block w-full"
-                            v-model="form.description"
-                            required
-                            autofocus
-                            autocomplete="name"
-                        />
-
-                        <InputError class="mt-2" :message="form.errors.description" />
-                    </div>
-
-                    <div class="mt-4">
-                        <InputLabel value="Duration" />
-
-                        <DatePicker v-model:value="form.duration" range />
-                    </div>
-
-                    <div class="mt-4">
-                        <InputLabel for="cover_image" value="Cover Image" />
-
-                        <input @change="handleImage" type="file" accept="image/png, image/jpeg" class="file-input w-full max-w-xs" />
-                    </div>
-                </form>
-
-                <div class="modal-action">
-                    <PrimaryButton @click="submit" class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Submit
-                    </PrimaryButton>
-                    <label for="add-program" class="btn">
-                       Cancel
-                    </label>
-                </div>
-            </div>
+            <EditProgram :program="singleProgram" />
+            <AddProgram />
         </div>
     </AuthenticatedLayout>
 </template>

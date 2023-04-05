@@ -11,15 +11,13 @@ use Inertia\Inertia;
 
 class ProgramController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): \Inertia\Response
+    public function index(Request $request): \Inertia\Response
     {
         $programs = Program::all();
 
         return Inertia::render('Program', [
-            'programs' => $programs
+            'programs' => $programs,
+            'isAdmin' => $request->user()->hasRole('admin')
         ]);
     }
 

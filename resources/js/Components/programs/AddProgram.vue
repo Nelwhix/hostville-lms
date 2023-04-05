@@ -1,4 +1,37 @@
+<script setup>
+import InputLabel from "@/Components/InputLabel.vue";
+import TextInput from "@/Components/TextInput.vue";
+import InputError from "@/Components/InputError.vue";
+import {useForm} from "@inertiajs/vue3";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import DatePicker from 'vue-datepicker-next';
+import 'vue-datepicker-next/index.css';
+
+const submit = () => {
+    form.processing = true
+    form.post(route('program.store'));
+
+    const checkbox = document.getElementById('add-program');
+
+    checkbox.checked = false;
+};
+
+const handleImage = (e) => {
+    form.cover_image = e.target.files[0]
+}
+
+const form = useForm({
+    title: '',
+    description: '',
+    duration: null,
+    cover_image: null,
+    processing: false
+})
+
+</script>
+
 <template>
+    <input type="checkbox" id="add-program" class="modal-toggle" />
     <div class="modal">
         <div class="modal-box">
             <h3>Add New Program</h3>
@@ -50,12 +83,12 @@
             </form>
 
             <div class="modal-action">
+                <label for="add-program" class="btn bg-gray-400 border-gray-400">
+                    Cancel
+                </label>
                 <PrimaryButton @click="submit" class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Submit
                 </PrimaryButton>
-                <label for="add-program" class="btn">
-                    Cancel
-                </label>
             </div>
         </div>
     </div>
